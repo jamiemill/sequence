@@ -488,7 +488,7 @@ class SequenceBehavior extends ModelBehavior {
 
     foreach ($groupFields as $groupField => $escapedGroupField) {
 
-      if (isset($model->data[$model->alias][$groupField])) {
+      if (array_key_exists($groupField,$model->data[$model->alias])) {
 
         $this->_newGroups[$model->alias][$groupField] = $model->data[$model->alias][$groupField];
 

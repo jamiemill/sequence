@@ -580,6 +580,36 @@ class SequenceBehaviorMultiGroupTestCase extends CakeTestCase {
      );
     $this->assertEqual($results, $expected);
   }
+  
+  function testEditGroupMoveToNull() {
+    $MultiGroupedItem = new MultiGroupedItem();
+    $MultiGroupedItem->save(array(
+      'MultiGroupedItem' => array(
+        'id' => '3',
+        'group_field_2' => null,
+      )
+    ));
+    $results = $MultiGroupedItem->find('all', array('conditions' => array(
+      'OR' => array(
+        array(
+          'group_field_1' => 1,
+          'group_field_2' => 1
+        ),
+        array(
+          'group_field_1' => 1,
+          'group_field_2' => null
+        )
+      )
+    ), 'order' => '`MultiGroupedItem`.`group_field_1`, `MultiGroupedItem`.`group_field_2`, `MultiGroupedItem`.`order`'));
+    $expected = array(
+       array('MultiGroupedItem' => array('id' => 3, 'name' => 'Group1 1 Group2 1 Item C', 'group_field_1' => 1, 'group_field_2' => null, 'order' => 0)),
+      array('MultiGroupedItem' => array('id' => 1, 'name' => 'Group1 1 Group2 1 Item A', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 0)),
+       array('MultiGroupedItem' => array('id' => 2, 'name' => 'Group1 1 Group2 1 Item B', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 1)),
+       array('MultiGroupedItem' => array('id' => 4, 'name' => 'Group1 1 Group2 1 Item D', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 2)),
+       array('MultiGroupedItem' => array('id' => 5, 'name' => 'Group1 1 Group2 1 Item E', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 3)),
+     );
+    $this->assertEqual($results, $expected);
+  }
 
 
 }
