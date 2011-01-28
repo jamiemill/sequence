@@ -546,5 +546,41 @@ class SequenceBehaviorMultiGroupTestCase extends CakeTestCase {
 		$this->assertEqual($results, $expected);
   }
 
+  function testEditPartialGroupSpecified() {
+    $MultiGroupedItem = new MultiGroupedItem();
+    $MultiGroupedItem->save(array(
+      'MultiGroupedItem' => array(
+        'id' => '3',
+        'group_field_2' => '2',
+      )
+    ));
+    $results = $MultiGroupedItem->find('all', array('conditions' => array(
+      'OR' => array(
+        array(
+          'group_field_1' => 1,
+          'group_field_2' => 1
+        ),
+        array(
+          'group_field_1' => 1,
+          'group_field_2' => 2
+        )
+      )
+    ), 'order' => '`MultiGroupedItem`.`group_field_1`, `MultiGroupedItem`.`group_field_2`, `MultiGroupedItem`.`order`'));
+    $expected = array(
+      array('MultiGroupedItem' => array('id' => 1, 'name' => 'Group1 1 Group2 1 Item A', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 0)),
+       array('MultiGroupedItem' => array('id' => 2, 'name' => 'Group1 1 Group2 1 Item B', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 1)),
+       array('MultiGroupedItem' => array('id' => 4, 'name' => 'Group1 1 Group2 1 Item D', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 2)),
+       array('MultiGroupedItem' => array('id' => 5, 'name' => 'Group1 1 Group2 1 Item E', 'group_field_1' => 1, 'group_field_2' => 1, 'order' => 3)),
+       array('MultiGroupedItem' => array('id' => 6, 'name' => 'Group1 1 Group2 2 Item A', 'group_field_1' => 1, 'group_field_2' => 2, 'order' => 0)),
+       array('MultiGroupedItem' => array('id' => 7, 'name' => 'Group1 1 Group2 2 Item B', 'group_field_1' => 1, 'group_field_2' => 2, 'order' => 1)),
+       array('MultiGroupedItem' => array('id' => 8, 'name' => 'Group1 1 Group2 2 Item C', 'group_field_1' => 1, 'group_field_2' => 2, 'order' => 2)),
+       array('MultiGroupedItem' => array('id' => 9, 'name' => 'Group1 1 Group2 2 Item D', 'group_field_1' => 1, 'group_field_2' => 2, 'order' => 3)),
+       array('MultiGroupedItem' => array('id' => 10, 'name' => 'Group1 1 Group2 2 Item E', 'group_field_1' => 1, 'group_field_2' => 2, 'order' => 4)),
+       array('MultiGroupedItem' => array('id' => 3, 'name' => 'Group1 1 Group2 1 Item C', 'group_field_1' => 1, 'group_field_2' => 2, 'order' => 5)),
+     );
+    $this->assertEqual($results, $expected);
+  }
+
+
 }
 ?>

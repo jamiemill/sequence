@@ -492,6 +492,10 @@ class SequenceBehavior extends ModelBehavior {
 
         $this->_newGroups[$model->alias][$groupField] = $model->data[$model->alias][$groupField];
 
+      } elseif ($model->id) {
+
+        $this->_newGroups[$model->alias][$groupField] = $model->field($groupField);
+
       }
 
     }
