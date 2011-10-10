@@ -594,6 +594,7 @@ class SequenceBehavior extends ModelBehavior {
         $update['conditions']
       );
 
+	  $this->_unbindAllBelongsTo($model);
       $success = $model->updateAll($update['action'], $conditions);
 
       $return = $return && $success;
@@ -602,6 +603,12 @@ class SequenceBehavior extends ModelBehavior {
 
     return $return;
 
+  }
+
+  protected function _unbindAllBelongsTo(&$model) {
+	if(!empty($model->belongsTo)) {
+      $model->unbindModel(array('belongsTo'=>array_keys($model->belongsTo)));
+	}
   }
 
 }
